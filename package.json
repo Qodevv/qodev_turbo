@@ -1,0 +1,26 @@
+{
+  "name": "qodev-repo",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev --parallel",
+    "lint": "turbo lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "dev:qodev": "turbo run dev --filter=qodev_app",
+    "dev:qodev_office": "turbo run dev --filter=qodev_office"
+  },
+  "devDependencies": {
+    "@repo/eslint-config": "*",
+    "@repo/typescript-config": "*",
+    "prettier": "^3.1.1",
+    "turbo": "latest"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "npm@10.3.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}
