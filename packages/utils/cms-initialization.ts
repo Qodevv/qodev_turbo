@@ -30,10 +30,11 @@ type ParsedContent = {
 }
 
 type CmsDto = {
-    contentKey: string
+    pageKey: string
     content: string
     access: number
     isDisabled: number
+    path: string
 }
 
 export async function initializedCms(){
@@ -54,4 +55,14 @@ export async function enrollCms(cmsDto: CmsDto){
         }
     })
     return (await response).data ?? null
+}
+
+export async function cmsInitEnroll(){
+    const response = axios.post(`${config.value.Development}/cms-service/cms-init-enrollment`, {}, {
+        headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': '34a89f9063bb49a59d2525220b677e25'
+        }
+    })
+    return (await response).data ?? null;
 }

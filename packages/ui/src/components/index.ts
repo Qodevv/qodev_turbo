@@ -6,3 +6,4 @@
 
 
 export * from './buttons/Button'
+export * from './loaders/ComponentLoader'

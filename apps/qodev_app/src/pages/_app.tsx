@@ -3,8 +3,11 @@ import type { AppProps } from "next/app";
 import { Theme, Container } from '@radix-ui/themes'
 import { NextPage } from 'next';
 import { ReactElement, ReactNode } from 'react';
-import '@radix-ui/themes/styles.css'
-import '../styles/theme-config.css'
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
+
 
 
 export type NextPageWithLayout<P = any, IP = P> = NextPage<P, IP> & {

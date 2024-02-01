@@ -5,4 +5,5 @@
  */
 
 export * from './global/GlobalContext'
-export * from './global/LoaderContext'
+export * from './global/types'
+export * from './global/CmsElementsContext'

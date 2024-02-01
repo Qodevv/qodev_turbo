@@ -4,8 +4,8 @@
  * Created by the Product Engineering Team/Software Engineering Innovation Group
  */
 
-import { createContext, useContext, useEffect, useState } from "react";
-import { AuthorizedBlock, UnauthorizedBlock } from "../types/cms";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import { AuthorizedBlock, Elements, ParsedContent, UnauthorizedBlock } from "@repo/utils/context";
 import { hooks } from '@repo/utils'
 import { useRouter } from "next/router";
 
@@ -16,22 +16,13 @@ type AppContextValue = {
     setLoader: any
 };
 
-export type ParsedContent = {
-    matchKey: string
-    path: string
-    hasAuthorizedBlock: number
-    authorizedBlock: AuthorizedBlock[]
-    unauthorizedBlock: UnauthorizedBlock[]
-    hasLoading: number
-    hasContainer: number
-}
+
 
 export type PreloadedCmsType = {
-    contentKey: string
+    pageKey: string
     content: string
     path: string
     access: number
-    currentScreen: number
     isDisabled: number
 };
   
@@ -43,52 +34,55 @@ export const ApplicationProvider: React.FC<React.PropsWithChildren> = ({
 }) => {
     const router = useRouter()
     const [cms, setCms] = useState<PreloadedCmsType[]>([]);
-    const [loader, setLoader] = useState<boolean>(false)
+    const [loader, setLoader] = useState<boolean>(true)
     const [contents, setContents] = useState<ParsedContent[]>([])
-    const proceedPageNotFound = hooks.useApiCallBack(api => api.cms.updateToPageNotFound())
-    const lookCmsPaths = hooks.useApiCallBack(
-        async (api, args: { currentKey: string }) => await api.cms.findCmsPaths(args)
-    )
-    const loadCms = hooks.useApiCallBack(async (api, contentKey: string) => await api.cms.filterCms(contentKey))
-    const getCmsCurrentScreen = hooks.useApiCallBack(api => api.cms.cmsCurrentScreen())
-    const changeCmsScreen = hooks.useApiCallBack(
-        async (api, args:{ currentKey: string }) => await api.cms.cmsChangeScreen(args)
-    )
+    const loadCms = hooks.useApiCallBack(async (api, args: {
+        currentKey: string
+    }) => await api.cms.filterCms(args))
+
+    
+
     const preloadCms = () => {
-        getCmsCurrentScreen.execute()
-        .then(screen => {
-            const result = loadCms.execute(screen.data)
+        if(router.asPath === "/") {
+            const result = loadCms.execute({ currentKey: "/home" })
             result.then(res => {
-                setCms(res.data)
-                res.data.length > 0 && res.data.map((item: any) => {
-                    const parsedContents: ParsedContent[] = JSON.parse(item.content)
-                    parsedContents.length > 0 && parsedContents.map((pcms) => {
-                        if(pcms.hasLoading === 1) {
-                            setLoader(!loader)
-                        }
+                if(res.data.length > 0){
+                    res.data.map((item: any) => {
+                        const parsedContents: ParsedContent[] = JSON.parse(item.content)
+                        
+                        setCms(res.data)
+                        setContents(parsedContents)
                     })
-                    setContents(parsedContents)
-                })
-            })
+                } else {
+                    setLoader(false)
+                    setContents([])
+                    setCms([])
+                }
         })
+        } else {
+            const result = loadCms.execute({ currentKey: router.asPath })
+            result.then(res => {
+                if(res.data.length > 0){
+                    res.data.map((item: any) => {
+                        const parsedContents: ParsedContent[] = JSON.parse(item.content)
+                        setCms(res.data)
+                        setContents(parsedContents)
+                    })
+                } else {
+                    setContents([])
+                    setCms([])
+                }
+        })
+        }
     }
 
     useEffect(() => {
+        preloadCms()
+    }, [])
+
+    useEffect(() => {
         const changeCmsRouter = async () => {
-            try {
-                console.log(router.asPath)
-                lookCmsPaths.execute({ currentKey: router.asPath })
-                .then(async (res) => {
-                    if(!res.data) {
-                        proceedPageNotFound.execute()
-                        preloadCms()
-                    } else {
-                       console.log(res.data)
-                    }
-                })
-            } catch (error) {
-                console.log(error)
-            }
+            preloadCms()
         }
         router.events.on('routeChangeStart', changeCmsRouter)
 
@@ -96,10 +90,8 @@ export const ApplicationProvider: React.FC<React.PropsWithChildren> = ({
             router.events.off('routeChangeStart', changeCmsRouter)
         }
     }, [router])
+
     
-    useEffect(() => {
-        preloadCms()
-    }, [])
 
     return (
         <ApplicationContext.Provider value={{

@@ -6,3 +6,4 @@
 
 
 export * from './src/components'
+export * as uihooks from './src/hooks'

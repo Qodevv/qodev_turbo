@@ -11,8 +11,6 @@ import {
     cmsInit, context, hooks
 } from '@repo/utils'
 import { ApplicationProvider } from '@/core/context/ApplicationContext'
-import { useRouter } from "next/router"
-import { useEffect } from "react"
 
 interface Props {
     data?: any;
@@ -28,46 +26,18 @@ export const Page: NextPage<Props> = ({ data, error }) => {
     )
     return (
        <ApplicationProvider>
-        <context.PageLoaderContextProvider>
-           <Layout  />
-        </context.PageLoaderContextProvider>
+         <Layout />
        </ApplicationProvider>
     )
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
     try {
-        //change stringifiedContent data accordingly
-        const stringifiedContent = JSON.stringify([
-            {
-                matchKey: 'about-block',
-                hasAuthorizedBlock: 0,
-                authorizedBlock: [],
-                unauthorizedBlock: [
-                    {
-                        htmlBlockId: 1,
-                        htmlBlock: '',
-                        htmlBlockType: 'root'
-                    }
-                ],
-                hasLoading: 1,
-                hasContainer: 1
-            }
-        ])
-        // don't let cmsData an empty object unless we have new validation on cms api
-        const cmsData = {
-            contentKey: 'about-block',
-            access: 0,
-            path: "/about",
-            content: stringifiedContent,
-            isDisabled: 0,
-            currentScreen: 0
-        }
-        const initEnrollCms = await cmsInit.enrollCms(cmsData as any)
+        const autoEnroll = await cmsInit.cmsInitEnroll()
         return {
             props: {
                 data: {
-                    initEnrollCms
+                    autoEnroll
                 }
             }
         }

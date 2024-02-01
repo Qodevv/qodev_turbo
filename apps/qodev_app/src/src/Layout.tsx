@@ -9,27 +9,35 @@ import { PageContainer } from "@/components/PageContainer"
 import { PageContent } from "@/components/PageContent"
 import { useApplicationContext } from "@/core/context/ApplicationContext"
 import { LoadableCmsProvider } from "@/core/context/LoadableCmsContext"
-import { Theme } from '@radix-ui/themes'
-import { useRouter } from 'next/router'
-import { hooks } from '@repo/utils'
-import { useEffect, useState } from "react";
-
+import { ThemeProvider, createTheme } from '@mui/material/styles'
+import { QueryClient, QueryClientProvider } from "react-query";
+import { CssBaseline } from "@mui/material";
+import { CmsElementProvider } from '@repo/utils/context'
+import { Header } from "@/components/header/Header"
+import { Footer } from "@/components/footer/Footer"
 
 export const Layout: React.FC = () => {
     const { cms, pageContents, loading } = useApplicationContext()
-    
+    const theme = createTheme()
+    const queryClient = new QueryClient({})
     return (
         <>
-            <Theme>
-                {cms.length > 0 && <header>Header here</header>}
-                <LoadableCmsProvider>
-                    <PageContainer pageContents={pageContents}>
-                        <LoadablePageContent loading={loading}>
-                            <PageContent preloadedCms={cms} />
-                        </LoadablePageContent>
-                    </PageContainer>
-                </LoadableCmsProvider>
-            </Theme>
+            <ThemeProvider theme={theme}>
+                <CssBaseline />
+               <QueryClientProvider client={queryClient}>
+               <Header onLogout={() => {}} menu={[]} />
+                   <CmsElementProvider globals={cms}>
+                    <LoadableCmsProvider>
+                            <PageContainer pageContents={pageContents}>
+                                <LoadablePageContent loading={loading}>
+                                    <PageContent preloadedCms={cms} />
+                                </LoadablePageContent>
+                            </PageContainer>
+                        </LoadableCmsProvider>
+                   </CmsElementProvider>
+                   <Footer />
+               </QueryClientProvider>
+            </ThemeProvider>
         </>
     )
 }

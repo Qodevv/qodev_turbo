@@ -10,15 +10,30 @@ import {
 
  export class CmsApi {
     constructor(private readonly axios: AxiosInstance){}
-    public filterCms(contentKey: string){
-      return this.axios.get(`/cms-service?contentKey=${contentKey}`)
+    public filterCms(props: {
+      currentKey: string
+    }){
+      return this.axios.post(`/cms-service/cms-list`, props)
     }
-    public filterMechanism(contentKey: string) {
-      return this.axios.get(`/cms-service/filter?contentKey=${contentKey}`)
+    public filterMechanism(props : {
+      currentKey: string
+    }) {
+      return this.axios.post(`/cms-service/filter`, props)
     }
+    public cmsInit(){
+      return this.axios.post('/cms-service/cms-init-enrollment')
+    }
+    /**
+     * 
+     * @deprecated
+     */
     public cmsCurrentScreen() {
       return this.axios.get('/cms-service/current-screen')
     }
+    /**
+     * 
+     * @deprecated
+     */
     public cmsChangeScreen(props: {
       currentKey: string
     }) {
@@ -29,6 +44,10 @@ import {
     }){
       return this.axios.post('/cms-service/find-paths', props)
     }
+    /**
+     * 
+     * @deprecated
+     */
     public updateToPageNotFound(){
       return this.axios.put('/cms-service/page-not-found')
     }

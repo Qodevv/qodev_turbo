@@ -4,9 +4,11 @@
  * Created by the Product Engineering Team/Software Engineering Innovation Group
  */
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { useRouter } from 'next/router'
 import { hooks } from '@repo/utils'
+import { Elements, ParsedContent } from "@repo/utils/context";
+import { PreloadedCmsType } from "./ApplicationContext";
 
 
 const LoadableContext = createContext<{}>(undefined as any)
@@ -15,8 +17,8 @@ export const LoadableCmsProvider: React.FC<React.PropsWithChildren<{}>> = ({
     children
 }) => { 
     const router = useRouter()
-    const findUrlKey = hooks.useApiCallBack(async (api, contentKey: string) => await api.cms.filterMechanism(contentKey))
-    const getCmsCurrentScreen = hooks.useApiCallBack(api => api.cms.cmsCurrentScreen())
+    const findUrlKey = hooks.useApiCallBack(async (api, args: { currentKey: string }) => await api.cms.filterMechanism(args))
+        
     const consumeRouter = async () => {
         try {
              await reuseScreenInit()
@@ -28,15 +30,31 @@ export const LoadableCmsProvider: React.FC<React.PropsWithChildren<{}>> = ({
         consumeRouter()
     }, [])
     async function reuseScreenInit() {
-        await getCmsCurrentScreen.execute()
-        .then(async (screen) => {
-            const res = await findUrlKey.execute(screen.data)
+        if(router.asPath === "/") {
+            const res = await findUrlKey.execute({ currentKey: "/home"})
             const urlPath = res.data
-            if (urlPath !== router.asPath) {
-                router.push(urlPath);
+            if(!urlPath) {
+                return;
             }
-        })
+            else{
+                if (urlPath !== router.asPath) {
+                    router.push(urlPath);
+                }
+            }
+        }else {
+            const res = await findUrlKey.execute({ currentKey: router.asPath})
+            const urlPath = res.data
+            if(!urlPath) {
+                return;
+            }
+            else{
+                if (urlPath !== router.asPath) {
+                    router.push(urlPath);
+                }
+            }
+        }
     }
+
     
     return (
         <LoadableContext.Provider

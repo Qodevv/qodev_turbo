@@ -1,6 +1,7 @@
+import { ComponentLoader } from '@repo/ui'
+import { Box } from '@mui/material';
 import { useApplicationContext } from '@/core/context/ApplicationContext';
-import { usePageLoaderContext } from '@repo/utils/context'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react';
 
 interface Props {
     loading?: boolean;
@@ -8,7 +9,7 @@ interface Props {
 
 export const LoadablePageContent: React.FC<React.PropsWithChildren<Props>> = ({
     children,
-    loading
+    loading 
 }) => {
     const { setLoader } = useApplicationContext()
     useEffect(() => {
@@ -17,11 +18,16 @@ export const LoadablePageContent: React.FC<React.PropsWithChildren<Props>> = ({
         }, 3000)
     }, [])
     return (
-        <>
+        <> 
             {loading ? (
-                <span>Loading...</span>
-                // improve loading here > make a component
-            ) : <> {children} </>}
+                <Box flex={1} height="100%" display="flex" alignItems="center" justifyContent="center">
+                    <ComponentLoader disableMarginBottom />
+                </Box>
+            ) : (
+                <Box display={loading ? 'none' : 'block'} flexDirection="column" height="100%">
+                    {children}
+                </Box>
+            )}
         </>
     )
 }
