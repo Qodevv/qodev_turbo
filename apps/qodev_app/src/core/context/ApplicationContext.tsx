@@ -5,7 +5,7 @@
  */
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { AuthorizedBlock, Elements, ParsedContent, UnauthorizedBlock } from "@repo/utils/context";
+import {  MenuItems, ParsedContent } from "@repo/utils/context";
 import { hooks } from '@repo/utils'
 import { useRouter } from "next/router";
 
@@ -14,6 +14,7 @@ type AppContextValue = {
     loading?: boolean
     pageContents: ParsedContent[]
     setLoader: any
+    menus: MenuItems[]
 };
 
 
@@ -36,6 +37,7 @@ export const ApplicationProvider: React.FC<React.PropsWithChildren> = ({
     const [cms, setCms] = useState<PreloadedCmsType[]>([]);
     const [loader, setLoader] = useState<boolean>(true)
     const [contents, setContents] = useState<ParsedContent[]>([])
+    const [menus, setMenus] = useState<MenuItems[]>([])
     const loadCms = hooks.useApiCallBack(async (api, args: {
         currentKey: string
     }) => await api.cms.filterCms(args))
@@ -49,7 +51,17 @@ export const ApplicationProvider: React.FC<React.PropsWithChildren> = ({
                 if(res.data.length > 0){
                     res.data.map((item: any) => {
                         const parsedContents: ParsedContent[] = JSON.parse(item.content)
-                        
+                        const deepParsedContents = parsedContents.length > 0 && parsedContents.map((item: ParsedContent) => {
+                            return {
+                                header: item.header
+                            }
+                        }) as any
+                        const menuItems = deepParsedContents?.length > 0 && deepParsedContents.map((i: ParsedContent) => {
+                            return {
+                                menus: i.header.elements.menus
+                            }
+                        })
+                        setMenus(menuItems[0].menus)
                         setCms(res.data)
                         setContents(parsedContents)
                     })
@@ -65,6 +77,17 @@ export const ApplicationProvider: React.FC<React.PropsWithChildren> = ({
                 if(res.data.length > 0){
                     res.data.map((item: any) => {
                         const parsedContents: ParsedContent[] = JSON.parse(item.content)
+                        const deepParsedContents = parsedContents.length > 0 && parsedContents.map((item: ParsedContent) => {
+                            return {
+                                header: item.header
+                            }
+                        }) as any
+                        const menuItems = deepParsedContents?.length > 0 && deepParsedContents.map((i: ParsedContent) => {
+                            return {
+                                menus: i.header.elements.menus
+                            }
+                        })
+                        setMenus(menuItems[0].menus)
                         setCms(res.data)
                         setContents(parsedContents)
                     })
@@ -95,7 +118,8 @@ export const ApplicationProvider: React.FC<React.PropsWithChildren> = ({
 
     return (
         <ApplicationContext.Provider value={{
-             cms, loading: loader, pageContents: contents, setLoader
+             cms, loading: loader, pageContents: contents, setLoader,
+             menus
         }}>
             {children}
         </ApplicationContext.Provider>

@@ -17,7 +17,7 @@ import { Header } from "@/components/header/Header"
 import { Footer } from "@/components/footer/Footer"
 
 export const Layout: React.FC = () => {
-    const { cms, pageContents, loading } = useApplicationContext()
+    const { cms, pageContents, loading, menus } = useApplicationContext()
     const theme = createTheme()
     const queryClient = new QueryClient({})
     return (
@@ -25,7 +25,7 @@ export const Layout: React.FC = () => {
             <ThemeProvider theme={theme}>
                 <CssBaseline />
                <QueryClientProvider client={queryClient}>
-               <Header onLogout={() => {}} menu={[]} />
+               <Header onLogout={() => {}} menu={menus} />
                    <CmsElementProvider globals={cms}>
                     <LoadableCmsProvider>
                             <PageContainer pageContents={pageContents}>

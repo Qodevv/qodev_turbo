@@ -33,7 +33,7 @@ export const HeaderLogo: React.FC<Props> = ({
                 />
             ) : (
                 <Typography
-                variant="h3"
+                variant="button"
                 component="span"
                 fontWeight="bold"
                 color="primary"

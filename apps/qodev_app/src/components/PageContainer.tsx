@@ -12,7 +12,7 @@ export const PageContainer: React.FC<React.PropsWithChildren<Props>> = ({childre
     return (
         <>
                     {
-                    !hasContainer ? 
+                    hasContainer ? 
                     (
                         <Container
                         sx={{

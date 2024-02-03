@@ -13,8 +13,6 @@ export const parseContents = (
     contentCms: PreloadedCmsType[],
     contentKey: string
 ) => {
-    const { buttonByKey } = useCmsElementsContext()
-    const buttonCms = buttonByKey('About')
 
     if(contentCms.length > 0) {
         const match: any = contentCms.length > 0 && contentCms.map((item) => {
@@ -32,9 +30,6 @@ export const parseContents = (
                     return (
                         <>
                             <h3>Home</h3>
-                            <Button variant="contained">
-                                {buttonCms.key}
-                            </Button>
                         </>
                     )
                 default:
