@@ -43,7 +43,7 @@ export type NonStepperCmsFields = {
     shouldUnregister: boolean
 }
 
-type NonStepperValues = {
+export type FormFields = {
     name: string
     labelKey: string
     shouldUnregister: boolean
@@ -51,13 +51,13 @@ type NonStepperValues = {
     type: string
 }
 
-type NonStepperElementsProps = {
-    values: NonStepperValues[]
+type Fields = {
+    fields: FormFields[]
 }
 
-type NonStepperFormTypes = {
+type Forms = {
     formKey: string
-    elements: NonStepperElementsProps
+    elements: Fields
 }
 export type MenuItems = {
     link: string
@@ -72,7 +72,7 @@ export type HeaderElements = {
     stickyHeader: boolean
     menus: MenuItems[]
 }
-type HeaderProps = {
+export type HeaderProps = {
     elements: HeaderElements
 }
 
@@ -108,7 +108,7 @@ export type ParsedContent = {
     hasSidebar: boolean
     header: HeaderProps
     elements: Elements
-    nonStepperform: NonStepperFormTypes
+    forms: Forms
     stepperForm: Array<[]>
     multiForm: Array<[]>
 }
