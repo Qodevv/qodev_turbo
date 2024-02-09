@@ -4,9 +4,10 @@
  * Created by the Product Engineering Team/Software Engineering Innovation Group
  */
 
-export * as hooks from './hooks'
-export * as config from './config'
-export * as context from './context'
-export * as cmsInit from './cms-initialization'
-export * as storage from './storage'
-export * as cmsConfig from './config/cms-configuration'
+export * as hooks from "./hooks";
+export * as config from "./config";
+export * as context from "./context";
+export * as cmsInit from "./cms-initialization";
+export * as storage from "./storage";
+export * as cmsConfig from "./config/cms-configuration";
+export * as validation from "./validations";
