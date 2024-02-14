@@ -25,7 +25,7 @@ import {
 import { Input } from "./Input";
 import { InputLoader } from "./InputLoader";
 import React from "react";
-import { red, grey } from "@mui/material/colors";
+import { red } from "@mui/material/colors";
 import { ErrorFieldIcon } from "./ErrorFieldIcon";
 
 interface Props<T extends object>
