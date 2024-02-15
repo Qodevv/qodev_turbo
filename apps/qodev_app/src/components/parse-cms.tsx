@@ -26,6 +26,7 @@ export const parseContents = (
       match[0].content?.find((cms: ParsedContent) => {
         return cms.contentKey === contentKey;
       });
+    console.log(deserializeContents);
     if (match) {
       const { contentKey: matchedContentKey } = deserializeContents;
       switch (matchedContentKey) {
