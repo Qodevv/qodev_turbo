@@ -7,6 +7,7 @@
 import { PreloadedCmsType } from "@/core/context/ApplicationContext";
 import { ParsedContent } from "@repo/utils/context";
 import { LoginBlock } from "./blocks/Login/LoginBlock";
+import { HomeBlock } from ".";
 
 export const parseContents = (
   contentCms: PreloadedCmsType[],
@@ -25,15 +26,12 @@ export const parseContents = (
       match[0].content?.find((cms: ParsedContent) => {
         return cms.contentKey === contentKey;
       });
+    console.log(deserializeContents);
     if (match) {
       const { contentKey: matchedContentKey } = deserializeContents;
       switch (matchedContentKey) {
         case "home-block":
-          return (
-            <>
-              <h3>Home</h3>
-            </>
-          );
+          return <HomeBlock />;
         case "signin-block":
           return <LoginBlock />;
         default:
