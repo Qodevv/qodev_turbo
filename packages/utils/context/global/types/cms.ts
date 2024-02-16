@@ -42,18 +42,20 @@ export type NonStepperCmsFields = {
   shouldUnregister: boolean;
 };
 
+
 export type MenuItems = {
   link: string;
   name: string;
   relatedLinks: string;
   subMenuItems: Array<[]>;
-  imageSrc: string;
 };
 
 export type HeaderElements = {
   headerTitle: string;
   stickyHeader: boolean;
   menus: MenuItems[];
+  imageSrc: string;
+  floatRightButtons: ButtonsValues[]
 };
 export type HeaderProps = {
   elements: HeaderElements;
@@ -71,6 +73,10 @@ export interface ButtonsValues {
   variant: string;
   size: string;
   loading: boolean;
+  actionKey: string
+  shouldNavigate: boolean;
+  href: string
+  shouldHide: boolean
 }
 
 type AlertMessageKeyProps = {};
@@ -80,10 +86,27 @@ export type Labels = {
   value: string;
 };
 
+type ServicesElementEntity = {
+  name: string
+  description: string
+  icon: string
+}
+
+export type ImageSourceEntity = {
+  key: string;
+  value: string;
+}
+
+type DataElements = {
+  services: ServicesElementEntity[]
+  imageSource: ImageSourceEntity[]
+}
+
 export type Elements = {
   buttons: ButtonsValues[];
   alertMessageKey: AlertMessageKeyProps;
   labels: Labels[];
+  data: DataElements
 };
 
 export type ParsedContent = {

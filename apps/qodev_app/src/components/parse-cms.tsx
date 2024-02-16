@@ -26,12 +26,12 @@ export const parseContents = (
       match[0].content?.find((cms: ParsedContent) => {
         return cms.contentKey === contentKey;
       });
-    console.log(deserializeContents);
     if (match) {
       const { contentKey: matchedContentKey } = deserializeContents;
       switch (matchedContentKey) {
         case "home-block":
-          return <HomeBlock />;
+          const parseServices = deserializeContents.elements.data.services;
+          return <HomeBlock services={parseServices} />;
         case "signin-block":
           return <LoginBlock />;
         default:

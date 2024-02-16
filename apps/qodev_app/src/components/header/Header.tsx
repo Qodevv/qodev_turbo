@@ -10,10 +10,9 @@ interface Props {
 }
 
 export const Header: React.FC<Props> = ({ useRawLogoUrl, onLogout, menu }) => {
-  const { buttonByKey } = useCmsElementsContext();
+  const { floatButtonByKey } = useCmsElementsContext();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const btnLogin = buttonByKey("button_signin");
-
+  const floatButtonLogin = floatButtonByKey("button_signin");
   return (
     <>
       <header className="absolute inset-x-0 top-0 z-50">
@@ -53,12 +52,15 @@ export const Header: React.FC<Props> = ({ useRawLogoUrl, onLogout, menu }) => {
             ))}
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a
-              href="#"
-              className="text-sm font-semibold leading-6 text-gray-900"
-            >
-              Log in <span aria-hidden="true">&rarr;</span>
-            </a>
+            {floatButtonLogin.text !== "unknown_btn_resource" && (
+              <a
+                href={floatButtonLogin.href}
+                className="text-sm font-semibold leading-6 text-gray-900"
+              >
+                {floatButtonLogin.text}
+                <span aria-hidden="true">&rarr;</span>
+              </a>
+            )}
           </div>
         </nav>
         <Dialog
@@ -102,10 +104,10 @@ export const Header: React.FC<Props> = ({ useRawLogoUrl, onLogout, menu }) => {
                 </div>
                 <div className="py-6">
                   <a
-                    href="#"
+                    href={floatButtonLogin.href}
                     className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                   >
-                    {btnLogin.text}
+                    {floatButtonLogin.text}
                   </a>
                 </div>
               </div>
