@@ -15,14 +15,14 @@ import { CssBaseline } from "@mui/material";
 import { CmsElementProvider } from "@repo/utils/context";
 import { Header } from "@/components/header/Header";
 import { Footer } from "@/components/footer/Footer";
+import { theme } from "@/core/types/theme/theme";
 
 export const Layout: React.FC = () => {
   const { cms, pageContents, loading, menus } = useApplicationContext();
-  const theme = createTheme();
   const queryClient = new QueryClient({});
   return (
     <>
-      <ThemeProvider theme={theme}>
+      <ThemeProvider theme={theme()}>
         <CssBaseline />
         <QueryClientProvider client={queryClient}>
           <CmsElementProvider globals={cms}>
