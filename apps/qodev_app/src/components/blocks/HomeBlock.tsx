@@ -3,7 +3,6 @@ import React from "react";
 import { FeatureSection } from "./contents/FeatureSection2";
 import { FeatureSection3 } from "./contents/FeatureSection3";
 import { Typography } from "@mui/material";
-import { PrimaryButton } from "@repo/ui";
 
 interface Props {
   services: Elements["data"]["services"];
@@ -40,10 +39,7 @@ export const HomeBlock: React.FC<Props> = ({ services }) => {
               </div>
             </div>
             <div className="text-center">
-              <Typography
-                variant="h3"
-                className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl"
-              >
+              <Typography variant="h1" component="h3" fontWeight="bold">
                 {labelByKey("QFP")}
               </Typography>
               <p className="mt-6 text-lg leading-8 text-gray-600">
