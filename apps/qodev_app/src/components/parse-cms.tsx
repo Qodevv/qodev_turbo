@@ -7,6 +7,8 @@
 import { PreloadedCmsType } from "@/core/context/ApplicationContext";
 import { ParsedContent } from "@repo/utils/context";
 import { LoginBlock } from "./blocks/Login/LoginBlock";
+import { HomeBlock } from ".";
+import { NotFoundBlock } from "./blocks/NotFoundBlock";
 
 export const parseContents = (
   contentCms: PreloadedCmsType[],
@@ -29,21 +31,18 @@ export const parseContents = (
       const { contentKey: matchedContentKey } = deserializeContents;
       switch (matchedContentKey) {
         case "home-block":
-          return (
-            <>
-              <h3>Home</h3>
-            </>
-          );
+          const parseServices = deserializeContents.elements.data.services;
+          return <HomeBlock services={parseServices} />;
         case "signin-block":
           return <LoginBlock />;
         default:
-          return <div>Page not found</div>;
+          return <NotFoundBlock />;
       }
     } else {
       // improve page not found page.
-      return <div>Page not found or No content available</div>;
+      return <NotFoundBlock />;
     }
   } else {
-    return <div>Page not found or No content available</div>;
+    return <NotFoundBlock />;
   }
 };

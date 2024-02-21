@@ -1,22 +1,7 @@
-import { useState, MouseEvent } from "react";
-import { HeaderElements } from "@repo/utils/context";
-import { uihooks } from "@repo/ui";
-import { useRouter } from "../../core/router";
-import {
-  Grid,
-  AppBar,
-  Box,
-  Toolbar,
-  IconButton,
-  Menu,
-  Container,
-  Button,
-} from "@mui/material";
-
-import MenuIcon from "@mui/icons-material/Menu";
-import LockIcon from "@mui/icons-material/Lock";
-import { HeaderLogoNavigation } from "./HeaderLogoNavigation";
-import { HeaderLogo } from "./HeaderLogo";
+import { useState, MouseEvent, useEffect } from "react";
+import { HeaderElements, useCmsElementsContext } from "@repo/utils/context";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
+import { Dialog } from "@headlessui/react";
 
 interface Props {
   menu: HeaderElements["menus"];
@@ -25,119 +10,111 @@ interface Props {
 }
 
 export const Header: React.FC<Props> = ({ useRawLogoUrl, onLogout, menu }) => {
-  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
-  const router = useRouter();
-  // authentication context
-  const { isMobile } = uihooks.useResolution();
-
-  const handleOpenNavMenu = (event: MouseEvent<HTMLElement>) => {
-    setAnchorElNav(event.currentTarget);
-  };
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
-  };
-
+  const { floatButtonByKey } = useCmsElementsContext();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const floatButtonLogin = floatButtonByKey("button_signin");
   return (
     <>
-      <Box
-        role="banner"
-        component="header"
-        width="100%"
-        display="flex"
-        justifyContent="center"
-        zIndex={999}
-        sx={{
-          backgroundColor: "white",
-          borderBottomWidth: 1,
-          borderBottomStyle: "solid",
-          borderBottomColor: "divider",
-          ...(isMobile ? { position: "fixed", top: 0, left: 0, right: 0 } : {}),
-        }}
-      >
-        <AppBar
-          data-testid="app-bar-header"
-          position="static"
-          sx={{ backgroundColor: "#FFFFFF" }}
+      <header className="absolute inset-x-0 top-0 z-50">
+        <nav
+          className="flex items-center justify-between p-6 lg:px-8"
+          aria-label="Global"
         >
-          <Container maxWidth="xl">
-            <Toolbar disableGutters>
-              <Grid item xs={12} md={1}>
-                <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-                  <IconButton
-                    size="large"
-                    onClick={handleOpenNavMenu}
-                    color="inherit"
+          <div className="flex lg:flex-1">
+            <a href="#" className="-m-1.5 p-1.5">
+              <span className="sr-only">Your Company</span>
+              <img
+                className="h-8 w-auto"
+                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                alt=""
+              />
+            </a>
+          </div>
+          <div className="flex lg:hidden">
+            <button
+              type="button"
+              className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
+              onClick={() => setMobileMenuOpen(true)}
+            >
+              <span className="sr-only">Open main menu</span>
+              <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+            </button>
+          </div>
+          <div className="hidden lg:flex lg:gap-x-12">
+            {menu.map((item) => (
+              <a
+                key={item.name}
+                href={item.link}
+                className="text-sm font-semibold leading-6 text-gray-900"
+              >
+                {item.name}
+              </a>
+            ))}
+          </div>
+          <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+            {floatButtonLogin.text !== "unknown_btn_resource" && (
+              <a
+                href={floatButtonLogin.href}
+                className="text-sm font-semibold leading-6 text-gray-900"
+              >
+                {floatButtonLogin.text}
+                <span aria-hidden="true">&rarr;</span>
+              </a>
+            )}
+          </div>
+        </nav>
+        <Dialog
+          as="div"
+          className="lg:hidden"
+          open={mobileMenuOpen}
+          onClose={setMobileMenuOpen}
+        >
+          <div className="fixed inset-0 z-50" />
+          <Dialog.Panel className="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+            <div className="flex items-center justify-between">
+              <a href="#" className="-m-1.5 p-1.5">
+                <span className="sr-only">Your Company</span>
+                <img
+                  className="h-8 w-auto"
+                  src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                  alt=""
+                />
+              </a>
+              <button
+                type="button"
+                className="-m-2.5 rounded-md p-2.5 text-gray-700"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                <span className="sr-only">Close menu</span>
+                <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+              </button>
+            </div>
+            <div className="mt-6 flow-root">
+              <div className="-my-6 divide-y divide-gray-500/10">
+                <div className="space-y-2 py-6">
+                  {menu.map((item) => (
+                    <a
+                      key={item.name}
+                      href={item.link}
+                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                    >
+                      {item.name}
+                    </a>
+                  ))}
+                </div>
+                <div className="py-6">
+                  <a
+                    href={floatButtonLogin.href}
+                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
                   >
-                    <MenuIcon sx={{ color: "black" }} />
-                  </IconButton>
-                  <Menu
-                    id="menu-appbar"
-                    anchorEl={anchorElNav}
-                    anchorOrigin={{
-                      vertical: "bottom",
-                      horizontal: "left",
-                    }}
-                    keepMounted
-                    transformOrigin={{
-                      vertical: "top",
-                      horizontal: "left",
-                    }}
-                    open={Boolean(anchorElNav)}
-                    onClose={handleCloseNavMenu}
-                    sx={{
-                      display: { xs: "block", md: "none" },
-                    }}
-                  >
-                    {/* {menu.map((menus, index) => (
-                  <MenuItem key={index} onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center">{menus.name}</Typography>
-                  </MenuItem>
-                ))} */}
-                  </Menu>
-                </Box>
-              </Grid>
-              <Grid item xs={3} sx={{ display: "flex", mr: 1, width: "25%" }}>
-                {/* Qodev logo */}
-                <HeaderLogoNavigation shouldNavigateToNewTab={false} href="/">
-                  <HeaderLogo />
-                </HeaderLogoNavigation>
-              </Grid>
-              <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-                {menu.map((menus, idx) => (
-                  <Button
-                    key={idx}
-                    onClick={handleCloseNavMenu}
-                    sx={{
-                      my: 2,
-                      color: "black",
-                      display: "block",
-                      fontSize: "15px",
-                      fontWeight: "400",
-                      paddingRight: "30px",
-                    }}
-                  >
-                    {menus.name}
-                  </Button>
-                ))}
-              </Box>
-
-              <Grid container item xs={12} display="flex" justifyContent="end">
-                <Grid display="flex" alignItems="center">
-                  <Button>{/* <Image src={search_icon} /> */}</Button>
-                </Grid>
-                <Button
-                  size="small"
-                  variant="contained"
-                  startIcon={<LockIcon />}
-                  sx={{ background: "#059ED8", borderRadius: "9999px" }}
-                >
-                  LOGIN
-                </Button>
-              </Grid>
-            </Toolbar>
-          </Container>
-        </AppBar>
-      </Box>
+                    {floatButtonLogin.text}
+                  </a>
+                </div>
+              </div>
+            </div>
+          </Dialog.Panel>
+        </Dialog>
+      </header>
     </>
   );
 };

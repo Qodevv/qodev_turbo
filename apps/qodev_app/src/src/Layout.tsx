@@ -25,8 +25,8 @@ export const Layout: React.FC = () => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <QueryClientProvider client={queryClient}>
-          <Header onLogout={() => {}} menu={menus} />
           <CmsElementProvider globals={cms}>
+            <Header onLogout={() => {}} menu={menus} />
             <LoadableCmsProvider>
               <PageContainer pageContents={pageContents}>
                 <LoadablePageContent loading={loading}>

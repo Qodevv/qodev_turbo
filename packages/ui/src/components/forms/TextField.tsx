@@ -166,12 +166,8 @@ export const TextFieldComponent = <T extends object>({
           error={error}
           disabled={disabled}
           sx={{
-            backgroundColor: disabled ? "lightgrey" : "inherit",
-            borderRadius: 0,
-            position: "relative",
-            "&.Mui-error fieldset": {
-              borderWidth: 2,
-            },
+            backgroundColor: (theme) =>
+              disabled ? theme.palette.grey[200] : "inherit",
             ...sx,
           }}
           multiline={multiline}

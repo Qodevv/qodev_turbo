@@ -26,6 +26,7 @@ export const LoadablePageContent: React.FC<React.PropsWithChildren<Props>> = ({
           display="flex"
           alignItems="center"
           justifyContent="center"
+          sx={{ mt: 30 }}
         >
           <ComponentLoader disableMarginBottom />
         </Box>

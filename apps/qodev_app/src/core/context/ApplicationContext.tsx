@@ -102,6 +102,7 @@ export const ApplicationProvider: React.FC<React.PropsWithChildren> = ({
                   menus: i.header.elements.menus,
                 };
               });
+            console.log(parsedContents);
             setMenus(menuItems[0].menus);
             setCms(res.data);
             setContents(parsedContents);
