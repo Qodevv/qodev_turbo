@@ -8,4 +8,3 @@ export * from "./buttons/Button";
 export * from "./loaders/ComponentLoader";
 export * from "./forms";
 export * from "./buttons/PrimaryButton";
-export * from "./Card/Card";
