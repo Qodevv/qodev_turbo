@@ -15,7 +15,7 @@ import { CssBaseline } from "@mui/material";
 import { CmsElementProvider } from "@repo/utils/context";
 import { Header } from "@/components/header/Header";
 import { Footer } from "@/components/footer/Footer";
-import { theme } from "@/core/types/theme/theme";
+import { theme } from "@repo/ui";
 
 export const Layout: React.FC = () => {
   const { cms, pageContents, loading, menus } = useApplicationContext();
