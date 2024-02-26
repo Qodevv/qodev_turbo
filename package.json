@@ -7,18 +7,21 @@
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "dev:qodev": "turbo run dev --filter=qodev_app",
-    "dev:qodev_office": "turbo run dev --filter=qodev_office"
+    "dev:qodev_office": "turbo run dev --filter=qodev_office",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "devDependencies": {
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
+    "jest": "^29.7.0",
     "prettier": "^3.1.1",
     "turbo": "latest"
   },
   "engines": {
     "node": ">=18"
   },
-  "packageManager": "npm@10.3.0",
+  "packageManager": "yarn@1.22.21",
   "workspaces": [
     "apps/*",
     "packages/*"
